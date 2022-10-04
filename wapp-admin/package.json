@@ -1,0 +1,49 @@
+{
+  "name": "wapp-admin",
+  "version": "1.0.0",
+  "description": "wapp-admin",
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "@ice/store": "^2.0.3",
+    "axios": "^0.27.2",
+    "classnames": "^2.3.2",
+    "create-app-shared": "0.2.6",
+    "history": "4.9.0",
+    "loglevel": "^1.8.0",
+    "miniapp-history": "0.1.4",
+    "miniapp-renderer": "0.1.15",
+    "monaco-editor": "0.23.0",
+    "react": "^17.0.2",
+    "react-app-renderer": "2.0.3",
+    "react-dom": "^17.0.2",
+    "react-monaco-editor": "0.42.0",
+    "react-router": "5.2.1",
+    "react-router-dom": "^5.3.3",
+    "regenerator-runtime": "^0.13.7",
+    "universal-env": "3.3.3"
+  },
+  "devDependencies": {
+    "@ice/spec": "^1.0.1",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "build-plugin-icestark": "^1.0.2",
+    "eslint": "^6.0.1",
+    "ice.js": "1.17.2",
+    "monaco-editor-webpack-plugin": "3.0.1"
+  },
+  "scripts": {
+    "start": "icejs start --port 19003",
+    "build": "icejs build"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "iceworks": {
+    "type": "react",
+    "adapter": "adapter-react-v3"
+  },
+  "ideMode": {
+    "name": "ice-react"
+  },
+  "private": true,
+  "originTemplate": "@icedesign/stark-layout-scaffold"
+}

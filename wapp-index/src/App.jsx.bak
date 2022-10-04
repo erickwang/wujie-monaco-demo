@@ -1,0 +1,117 @@
+import { HashRouter as Router, Route, Routes, NavLink, Navigate, useLocation, useNavigate } from "react-router-dom";
+import WujieReact from "wujie-react";
+import React, { useState } from "react";
+
+import Default from "./pages/Default";
+import WappHome from "./pages/WappHome";
+import WappDocs from "./pages/WappDocs";
+
+import './App.less';
+
+const { bus } = WujieReact;
+
+const subMap = {
+  'wapp-home': [],
+  'wapp-docs': []
+};
+
+function Nav() {
+  const location = useLocation();
+  const navigation = useNavigate();
+  const [wappHomeFlag, setWappHomeFlag] = useState(location.pathname.includes("wapp-home-sub"));
+  const [wappDocsFlag, setWappDocsFlag] = useState(location.pathname.includes("wapp-docs-sub"));
+
+  // 在 xxx-sub 路由下子应用将激活路由同步给主应用，主应用跳转对应路由高亮菜单栏
+  bus.$on("sub-route-change", (name, path) => {
+    console.log('sub-route-change ~~~~');
+    const mainName = `${name}-sub`;
+    const mainPath = `/${name}-sub${path}`;
+    const currentPath = window.location.hash.replace("#", "")
+    if(currentPath.includes(mainName) && currentPath !== mainPath) {
+      navigation(mainPath);
+    }
+  });
+
+
+  const handleFlag = (name) => {
+    switch (name) {
+      case "wapp-home":
+        setWappHomeFlag(!wappHomeFlag);
+        break;
+      case "wapp-docs":
+        setWappDocsFlag(!wappDocsFlag);
+        break;
+      default:
+        break;
+    }
+  };
+
+  return (
+    <nav>
+      <NavLink to="/default" className={({ isActive }) => (isActive ? "active" : "inactive")}>
+        介绍
+      </NavLink>
+      <NavLink to="/wapp-home" className={({ isActive }) => (isActive ? "active" : "inactive")}>
+        wapp-home
+        {/* <CaretUpOutlined
+          className={react16Flag ? "main-icon active" : "main-icon"}
+          onClick={() => handleFlag("react16")}
+        /> */}
+      </NavLink>
+      <div className="sub-menu" style={{display: wappHomeFlag ? "block" : "none"}}>
+        {subMap['wapp-home'].map((item) => (
+          <NavLink to={`/wapp-home-sub/${item}`} key={item} className={({ isActive }) => (isActive ? "active" : "inactive")}>
+            {item}
+          </NavLink>
+        ))}
+      </div>
+      <NavLink to="/wapp-docs" className={({ isActive }) => (isActive ? "active" : "inactive")}>
+        wapp-docs<span className="alive">保活</span>
+        {/* <CaretUpOutlined
+          className={react17Flag ? "main-icon active" : "main-icon"}
+          onClick={() => handleFlag("react17")}
+        /> */}
+      </NavLink>
+      <div className="sub-menu" style={{display: wappDocsFlag ? "block" : "none"}}>
+        {subMap['wapp-docs'].map((item) => (
+          <NavLink to={`/wapp-docs-sub/${item}`} key={item} className={({ isActive }) => (isActive ? "active" : "inactive")}>
+            {item}
+          </NavLink>
+        ))}
+      </div>
+    </nav>
+  );
+}
+
+class App extends React.PureComponent {
+
+  render() {
+
+    return (
+      <div className="app">
+          <Router>
+            <div className="nav">
+              <Nav />
+            </div>
+            <div className="content">
+              <Routes>
+                <Route exact path="/default" element={<Default />} />
+                <Route exact path="/wapp-home" element={<WappHome />} />
+                {/* <Route exact path="/wapp-home-sub/:path" element={<WappHome />} /> */}
+                <Route exact path="/wapp-docs" element={<WappDocs />} />
+                <Route render={({ location }) => {
+                  console.log('location >>> ', location);
+                  return null;
+                }} />
+                {/* <Route exact path="/wapp-docs-sub/:path" element={<WappDocs />} /> */}
+                <Route path="*" element={<Navigate to="/default" replace />} />
+              </Routes>
+            </div>
+          </Router>
+        </div>
+    );
+
+  }
+}
+
+export default App
